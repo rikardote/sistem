@@ -7,34 +7,64 @@
 	<table class="table table-striped">
 		<thead>
 			<th>Qna ID</th>
+			<th>Num Empleado</th>
 			<th>Empleado</th>
 			<th>Codigo</th>
 			<th>Fecha Inicial</th>
 			<th>Fecha Final</th>
 			<th>Periodo</th>
+			<th>Total</th>
 			<th>Accion</th>
 
 		</thead>
 		<tbody>
+		{{--*/ $tmp = "" /*--}}
 		@foreach($incidencias as $incidencia)
 			<tr>
-			 <td>{{ $incidencia->qna->qna }}/{{ $incidencia->qna->year }}</td>
-			 <td>{{ $incidencia->employee->father_lastname }} {{ $incidencia->employee->mother_lastname }} {{ $incidencia->employee->name }}</td>
-			 <td>{{ $incidencia->codigodeincidencia->code }}</td>
-			 <td>{{ $incidencia->fecha_inicio }}</td>
-			 <td>{{ $incidencia->fecha_final }}</td>
-			 
-			 @if(isset($incidencia->periodo->periodo))
-					 <td>{{ $incidencia->periodo->periodo }}/{{ $incidencia->periodo->year }}</td>
-			 @else
-			 			<td></td>
-			 @endif
-			 <td>
-			 	<a href="{{ route('incidencias.edit', $incidencia->id) }}" class="btn btn-warning"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>
-			 	<a href="{{ route('incidencias.destroy', $incidencia->id) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a>
-			 </td>
-			</tr>
+				@if($incidencia->num_empleado == $tmp)
+				
+					<td></td>
+					<td></td>
+					 <td>{{ $incidencia->qna }}/{{ $incidencia->qna_year }}</td>
+					 <td align=center>{{ $incidencia->code }}</td>
+					 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
+					 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
+					 
+					 @if(isset($incidencia->periodo))
+							 <td align=center>{{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}</td>
+					 @else
+					 			<td></td>
+					 @endif
+					 <td align=center>{{ $incidencia->total }}</td>
+					 <td>
+					 	<a href="{{ route('incidencias.destroy', $incidencia->token) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a>
+					 </td>
+				</tr>
+				
+					
+				@else
+					<tr class="no-table">
+						<td align=center>{{ $incidencia->num_empleado }}</td>
+						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}</td>
+						 <td>{{ $incidencia->qna }}/{{ $incidencia->qna_year }}</td>
+						 <td align=center>{{ $incidencia->code }}</td>
+						 <td align=center>{{ fecha_dmy($incidencia->fecha_inicio) }}</td>
+						 <td align=center>{{ fecha_dmy($incidencia->fecha_final) }}</td>
+						 
+						 @if(isset($incidencia->periodo))
+								 <td align=center>{{ $incidencia->periodo }}/{{ $incidencia->periodo_year }}</td>
+						 @else
+						 			<td></td>
+						 @endif
+						 <td align=center>{{ $incidencia->total }}</td>
+						 <td>
+						 	<a href="{{ route('incidencias.destroy', $incidencia->token) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a>
+						 </td>
+					</tr>
+					{{--*/ $tmp = $incidencia->num_empleado /*--}}
+				@endif
 		@endforeach
 		</tbody>
 	</table>
+
 @endsection

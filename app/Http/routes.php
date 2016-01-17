@@ -29,7 +29,7 @@ Route::get('deparments/{code}/destroy', [
 ]);
 
 Route::resource('incidencias', 'IncidenciasController');
-Route::get('incidencias/{code}/destroy', [
+Route::get('incidencias/{token}/destroy', [
     'uses' => 'IncidenciasController@destroy',
     'as' => 'incidencias.destroy'
 ]);

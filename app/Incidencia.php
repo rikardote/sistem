@@ -30,6 +30,10 @@ class Incidencia extends Model
     {
       $this->attributes['periodo_id'] = $value ?: null;
     }
+      public function getQnaAttribute($value)
+    {
+        return str_pad($value, 2, '0', STR_PAD_LEFT);
+    }
   
 
 

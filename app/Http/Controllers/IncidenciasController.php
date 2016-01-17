@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DB;
 use App\Http\Requests\IncidenciasRequest;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -25,18 +26,16 @@ class IncidenciasController extends Controller
      */
     public function index()
     {
-        $incidencias = Incidencia::orderBy('id', 'DESC')->get();
-        
-        $incidencias->each(function($incidencias) {
-            $incidencias->qna;
-            $incidencias->employee;
-            $incidencias->codigodeincidencia;
-            $incidencias->periodo;
-            
-            
-        });
-        //dd($incidencias);
-
+       $conteo_total = DB::raw('count(*) as total');
+       $incidencias = Incidencia::getQuery()
+                 ->select('*','employees.id as empleado_id','incidencias.id as inc_id' ,'qnas.year as qna_year','periodos.year as periodo_year','periodos.periodo as periodo_p', DB::raw($conteo_total))
+                 ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
+                 ->leftJoin('qnas', 'qnas.id', '=', 'incidencias.qna_id')
+                 ->leftJoin('periodos', 'periodos.id', '=', 'incidencias.periodo_id')
+                 ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
+                 ->groupBy('token')
+                 ->get();
+//dd($incidencias);
         return view('incidencias.index')->with('incidencias', $incidencias);
     }
 
@@ -48,7 +47,7 @@ class IncidenciasController extends Controller
     public function create()
     {
         $incidencia = "";
-        //$incidencias = Incidencia::all();
+        
         $employees = Employe::all()->lists('num_empleado', 'id')->toArray();
         $qnas = Qna::all()->lists('qnaa', 'id')->toArray();
         $periodos = Periodo::all()->lists('periodoo', 'id')->toArray();
@@ -77,9 +76,27 @@ class IncidenciasController extends Controller
         $incidencia->fecha_inicio = fecha_ymd($request->fecha_inicio);
         $incidencia->fecha_final = fecha_ymd($request->fecha_final);
 
-        $incidencia->token = genToken();
-                 
-        $incidencia->save();
+        $token = genToken();
+
+        $fechaInicio=strtotime($incidencia->fecha_inicio);
+        $fechaFin=strtotime($incidencia->fecha_final);
+
+        for($i=$fechaInicio; $i<=$fechaFin; $i+=86400){
+            $fecha_inicio = date("Y-m-d", $i);
+            
+            $incidencia->create([
+                'qna_id'        => $request->qna_id,
+                'employee_id'   => $request->employee_id,
+                'fecha_inicio'  => $fecha_inicio,
+                'fecha_final'   => $incidencia->fecha_final,
+                'periodo_id'    => $request->periodo_id,
+                'codigodeincidencia_id' => $request->codigodeincidencia_id,
+                'token'         => $token,
+                'created_at'    => date("Y-m-d H:i:s"),
+                'updated_at'    => date("Y-m-d H:i:s"),
+            ]);
+        }     
+        
 
         Flash::success('Incidencia registrada con exito!');
         return redirect()->route('incidencias.index');
@@ -150,10 +167,14 @@ class IncidenciasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($token)
     {
-        $incidencia = Incidencia::find($id);
-        $incidencia->delete();
+        $incidencias = Incidencia::where('token', $token)->get();
+        //dd($incidencia);
+        foreach ($incidencias as $incidencia) {
+            $incidencia->delete();    
+        }
+        
 
         Flash::error('Incidencia borrada con exito!');
         return redirect()->route('incidencias.index');
