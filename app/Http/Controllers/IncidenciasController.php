@@ -33,6 +33,7 @@ class IncidenciasController extends Controller
                  ->leftJoin('qnas', 'qnas.id', '=', 'incidencias.qna_id')
                  ->leftJoin('periodos', 'periodos.id', '=', 'incidencias.periodo_id')
                  ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
+                 ->where('qna_id', '2')
                  ->groupBy('token')
                  ->get();
 //dd($incidencias);

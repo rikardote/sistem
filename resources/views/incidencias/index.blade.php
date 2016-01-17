@@ -6,9 +6,10 @@
 {!! link_to_route('incidencias.create', 'Nueva incidencia', [], ['class' => 'btn btn-info'])  !!}
 	<table class="table table-striped">
 		<thead>
-			<th>Qna ID</th>
+			
 			<th>Num Empleado</th>
 			<th>Empleado</th>
+			<th>Qna ID</th>
 			<th>Codigo</th>
 			<th>Fecha Inicial</th>
 			<th>Fecha Final</th>
@@ -43,6 +44,9 @@
 				
 					
 				@else
+				@for ($i=0; $i < 9; $i++)  
+					<td>&nbsp;</td>
+				@endfor
 					<tr class="no-table">
 						<td align=center>{{ $incidencia->num_empleado }}</td>
 						 <td>{{ $incidencia->father_lastname }} {{ $incidencia->mother_lastname }} {{ $incidencia->name }}</td>
