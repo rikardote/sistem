@@ -4,7 +4,10 @@
 
 @section('content')
  
-{!! link_to_route('employees.create', 'Nuevo Empleado', [], ['class' => 'btn btn-info load-form-modal', 'data-toggle'=>'modal','data-target'=>'#form-modal'])  !!}
+  <a data-url="{{ route('employees.create') }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
+    <span class="fa fa-plus-circle fa-2x" aria-hidden='true'></span>
+  </a> 
+
 	<table class="table table-striped">
 		<thead>
 			<th>Num Empleado</th>
@@ -23,7 +26,10 @@
 			 <td>{{ $employe->name }} </td>
 			 <td>{{ $employe->deparment->description }}</td>
 			 <td>
-			 	<a href="{{ route('employees.edit', $employe->num_empleado) }}" class="btn btn-warning"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span></a>
+			 	
+			 	<a data-url="{{ route('employees.edit', $employe->num_empleado) }}" class="load-form-modal  panelColorGreen" data-toggle ="modal" data-target='#form-modal'>
+			 		<span class="fa fa-plus-circle fa-2x" aria-hidden='true'></span>
+  				</a> 
 			 	<a href="{{ route('employees.destroy', $employe->num_empleado) }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></a>
 			 </td>
 			</tr>
@@ -31,6 +37,6 @@
 		</tbody>
 	</table>
 
-	@include('modals.form-modal', ['title'=>'Form Modal'])
+	@include('modals.form-modal', ['title'=>'Agregar/Modificar Empleados'])
     @include('modals.confirmation_modal', ['title'=>'Confirmation Modal'])
 @endsection

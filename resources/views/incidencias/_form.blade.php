@@ -62,3 +62,4 @@
 <div class="form-group">
   {!! Form::submit('Registrar', ['class' => 'btn btn-primary']) !!}
 </div>
+

@@ -26,18 +26,22 @@ class IncidenciasController extends Controller
      */
     public function index()
     {
-       $conteo_total = DB::raw('count(*) as total');
-       $incidencias = Incidencia::getQuery()
-                 ->select('*','employees.id as empleado_id','incidencias.id as inc_id' ,'qnas.year as qna_year','periodos.year as periodo_year','periodos.periodo as periodo_p', DB::raw($conteo_total))
-                 ->leftJoin('employees', 'employees.id', '=', 'incidencias.employee_id')
-                 ->leftJoin('qnas', 'qnas.id', '=', 'incidencias.qna_id')
-                 ->leftJoin('periodos', 'periodos.id', '=', 'incidencias.periodo_id')
-                 ->leftJoin('codigos_de_incidencias', 'codigos_de_incidencias.id', '=', 'incidencias.codigodeincidencia_id')
-                 ->where('qna_id', '2')
-                 ->groupBy('token')
-                 ->get();
-//dd($incidencias);
-        return view('incidencias.index')->with('incidencias', $incidencias);
+        $incidencias = Incidencia::getIncidencias(1);
+        $incidencia = "";
+        
+        $employees = Employe::all()->lists('num_empleado', 'id')->toArray();
+        $qnas = Qna::all()->lists('qnaa', 'id')->toArray();
+        $periodos = Periodo::all()->lists('periodoo', 'id')->toArray();
+        $codigosdeincidencias = Codigo_De_Incidencia::all()->lists('codigo', 'id')->toArray();
+
+        
+        return view('incidencias.index')
+            ->with('incidencia', $incidencia)
+            ->with('qnas', $qnas)
+            ->with('employees', $employees)
+            ->with('periodos', $periodos)
+            ->with('codigosdeincidencias', $codigosdeincidencias)
+            ->with('incidencias', $incidencias);
     }
 
     /**

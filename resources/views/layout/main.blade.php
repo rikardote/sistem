@@ -5,8 +5,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>@yield('title', 'Default')</title>
 	<link rel="stylesheet" href="{{ asset('plugins/bootstrap/css/bootstrap.css') }}">
+	<link rel="stylesheet" href="{{ asset('plugins/font-awesome/css/font-awesome.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('plugins/chosen/chosen.css') }}">
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="{{ asset('css/general.css') }}">
 
 
 </head>
@@ -37,7 +39,7 @@
 <script src="{{ asset('plugins/datepicker/js/ui.datepicker-es-MX.js') }}"></script>
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.js') }}"></script>
 <script src="{{ asset('plugins/chosen/chosen.jquery.js') }}"></script>
-
+<script src="{{ asset('js/script.js') }}"></script>
 
 @yield('js')
 
